@@ -3,7 +3,7 @@ let name;
 let textarea = document.querySelector("#textarea");
 let messageArea = document.querySelector(".message__area");
 do {
-  name = prompt("Please enter your name");
+  name = prompt("Please enter your name: ");
 } while (!name);
 
 textarea.addEventListener("keyup", (e) => {
@@ -17,13 +17,12 @@ function sendMessage(message) {
     user: name,
     message: message.trim(),
   };
-
-  // Append Message
+  // Append
   appendMessage(msg, "outgoing");
-  textarea.value = " ";
+  textarea.value = "";
   scrollToBottom();
 
-  //send to server
+  // Send to server
   socket.emit("message", msg);
 }
 
@@ -33,20 +32,19 @@ function appendMessage(msg, type) {
   mainDiv.classList.add(className, "message");
 
   let markup = `
-    <h4>${msg.user}</h4>
-    <p>${msg.message}</p>
-  `;
-
+        <h4>${msg.user}</h4>
+        <p>${msg.message}</p>
+    `;
   mainDiv.innerHTML = markup;
   messageArea.appendChild(mainDiv);
 }
 
-// Receive message
+// Recieve messages
 socket.on("message", (msg) => {
   appendMessage(msg, "incoming");
   scrollToBottom();
 });
 
 function scrollToBottom() {
-  messageArea.scrollTop = messageArea.scroll;
+  messageArea.scrollTop = messageArea.scrollHeight;
 }
